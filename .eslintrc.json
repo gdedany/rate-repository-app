@@ -5,6 +5,7 @@
       "version": "detect"
     }
   },
+  "requireConfigFile": false,
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "@babel/eslint-parser",
   "env": {
