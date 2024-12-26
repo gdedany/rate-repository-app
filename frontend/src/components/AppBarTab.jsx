@@ -2,11 +2,17 @@ import { View, Pressable } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 import { useNavigate } from "react-router-native";
-const AppBarTab = ({ label, path }) => {
+const AppBarTab = ({ label, path, callback }) => {
   const navigate = useNavigate();
+  const handlePressing = () => {
+    if (callback) {
+      callback();
+    }
+    navigate(path);
+  };
   return (
     <View>
-      <Pressable onPress={() => navigate(path)}>
+      <Pressable onPress={handlePressing}>
         <Text
           fontWeight={"bold"}
           fontSize={"heading"}

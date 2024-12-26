@@ -3,6 +3,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import Text from "./Text";
 import theme from "../theme";
+import useSignIn from "../hooks/useSignIn";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-native";
+import useAuthStorage from "../hooks/useAuthStorage";
+import { useApolloClient } from "@apollo/client";
 
 const initialValues = {
   username: "",
@@ -44,11 +49,24 @@ const styles = StyleSheet.create({
 });
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log("values :", formik.values);
+  const apolloClient = useApolloClient();
+  const authStorage = useAuthStorage();
 
-    formik.resetForm();
+  const navigate = useNavigate();
+  const [signIn, result] = useSignIn();
+
+  const onSubmit = async (values) => {
+    await signIn(values);
   };
+  useEffect(() => {
+    if (result.data) {
+      const token = result.data.authenticate.accessToken;
+      authStorage.setAccessToken(token);
+      apolloClient.resetStore();
+      navigate("/");
+    }
+  }, [result.data]);
+
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   return (
     <View style={styles.container}>
