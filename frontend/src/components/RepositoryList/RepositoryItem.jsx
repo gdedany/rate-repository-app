@@ -1,15 +1,11 @@
-import { View, StyleSheet, Image } from "react-native";
-import Text from "./Text";
-import theme from "../theme";
+import { View, StyleSheet, Image, Linking } from "react-native";
+import Text from "../Text";
+import theme from "../../theme";
 import RepositoryMetricItem from "./RepositoryMetricItem";
+import { Link } from "react-router-native";
+import Button from "../Button";
+import { openExternalLink } from "../../utils/misc";
 const styles = StyleSheet.create({
-  container: {
-    margin: 5,
-    backgroundColor: theme.colors.cardBackground,
-    borderRadius: 10,
-    padding: 10,
-    gap: 20,
-  },
   rowContainer: {
     gap: 20,
     flexDirection: "row",
@@ -28,15 +24,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryItem = ({ item }) => {
-  return (
-    <View style={styles.container}>
+const RepositoryItem = ({ item, isInList = true }) => {
+  const content = (
+    <View style={theme.containers.standardContainer}>
       <View style={styles.rowContainer}>
         <Image
           source={{ uri: item.ownerAvatarUrl }}
           style={{ width: 52, height: 52, borderRadius: 10 }}
         />
-        <View style={{ flex: 1, gap: 5 }}>
+        <View testID="repositoryFullName" style={{ flex: 1, gap: 5 }}>
           <Text fontSize={"heading"}>{item.fullName}</Text>
 
           <Text fontSize={"subheading"} color={"textSecondary"}>
@@ -53,7 +49,17 @@ const RepositoryItem = ({ item }) => {
         <RepositoryMetricItem label={"Reviews"} count={item.ratingAverage} />
         <RepositoryMetricItem label={"Rating"} count={item.reviewCount} />
       </View>
+      {!isInList && (
+        <View>
+          <Button onPress={() => openExternalLink(item.url)} text="open" />
+        </View>
+      )}
     </View>
+  );
+  return !isInList ? (
+    content
+  ) : (
+    <Link to={`/repositories/${item.id}`}>{content}</Link>
   );
 };
 

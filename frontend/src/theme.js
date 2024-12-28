@@ -8,7 +8,6 @@ const theme = {
     primary: "#0366d6",
     appBar: "#605F5E",
     mainBackground: "#e1e4e8",
-    cardBackground: "#fff",
   },
   paddings: {
     basicPadding: "10",
@@ -27,9 +26,20 @@ const theme = {
       default: "System",
     }),
   },
+
   fontWeights: {
     normal: "400",
     bold: "700",
+  },
+  containers: {
+    standardContainer: {
+      margin: 5,
+      flex: 1,
+      backgroundColor: "#fff",
+      borderRadius: 10,
+      padding: 10,
+      gap: 20,
+    },
   },
 };
 
